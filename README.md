@@ -1,52 +1,53 @@
 # Better Autostart 🚀
 
-Nowoczesna aplikacja w **Rust (Tauri v2)** oraz **React + Tailwind CSS**, która zastępuje domyślny mechanizm autostartu Windowsa, dając pełną kontrolę nad procesem logowania i wstawania aplikacji.
+A modern desktop application built with **Rust (Tauri v2)** and **React + Tailwind CSS** that replaces the default Windows autostart mechanism, giving you complete control over logon process ordering and execution pacing.
 
 ---
 
-## ✨ Kluczowe funkcjonalności
+## ✨ Key Features
 
-- **Przeciągnij i upuść (Drag & Drop):** Ustal dokładną kolejność uruchamiania programów za pomocą intuicyjnej listy drag & drop.
-- **Sekwencyjne uruchamianie w tle:** Aplikacje nie startują jednocześnie dławiąc procesor i dysk – uruchamiają się po kolei z konfigurowalnym odstępem czasu (np. 1.5 sekundy).
-- **Import z Windows Autostart:** Skaner rejestru (`HKCU\Run`, `HKLM\Run`) oraz folderu `shell:startup` pozwala jednym kliknięciem zaimportować obecne programy i bezpiecznie je wyłączyć w Windowsie (z automatyczną kopią zapasową w rejestrze).
-- **Uruchamianie jako Administrator (Run as Admin):** Opcja natywnego wywołania procesu przez `ShellExecuteW` z uprawnieniami administratora (`runas`).
-- **Przełącznik aktywności:** Wyłączanie programów bez usuwania ich z kolejki.
-- **Parametry i katalog roboczy:** Pełna obsługa argumentów wiersza poleceń (np. `--minimized`, `--silent`) i definiowanie `working_dir`.
-- **Integracja z zasobnikiem systemowym (Tray):** Aplikacja minimalizuje się do traya, skąd można podejrzeć stan, uruchomić całą kolejkę ręcznie lub zamknąć program.
-- **Cichy start w tle:** Przy autostarcie systemowym program może uruchamiać się bez pokazywania okna głównego (`--autostart`).
+- **Drag & Drop Ordering:** Reorder your startup applications using an intuitive, linear sequence list.
+- **Sequential Background Execution:** Applications don't launch simultaneously, avoiding disk and CPU throttling. Instead, they boot sequentially with a configurable pacing interval (e.g. 1.5s).
+- **Import from Windows Startup:** Scans Windows Registry (`HKCU\Run`, `HKLM\Run`) and the user `shell:startup` folder, allowing 1-click import with automatic registry backups.
+- **Run as Administrator:** Native process elevation via Win32 `ShellExecuteW` with `runas` verb.
+- **Active State Toggle:** Enable or disable applications without removing them from your sequence.
+- **Arguments & Working Directory:** Full support for command-line arguments (e.g., `--minimized`, `--silent`) and custom `working_dir`.
+- **System Tray Integration:** Minimizes cleanly to the system tray with a context menu to inspect status, run the sequence on demand, or quit.
+- **Silent Boot Mode:** When starting up with Windows (`--autostart`), launches silently into the system tray without displaying the desktop window.
 
 ---
 
-## 🛠️ Architektura i technologie
+## 🛠️ Architecture & Stack
 
-- **Backend:** Rust, Tauri v2, `winreg` (edycja rejestru Windows), Win32 API (`ShellExecuteW`).
+- **Backend:** Rust, Tauri v2, `winreg` (Windows Registry management), Win32 API (`ShellExecuteW`).
 - **Frontend:** React 18, TypeScript, Tailwind CSS, `@dnd-kit/core` & `@dnd-kit/sortable`, `lucide-react`.
-- **Konfiguracja:** Zapisywana w czytelnym formacie JSON w `%APPDATA%\BetterAutostart\config.json`.
+- **Design System:** Hallmark `modern-minimal` genre with `Workbench` macrostructure and `Cobalt Technical Dark` OKLCH theme.
+- **Configuration:** Persisted in JSON at `%APPDATA%\BetterAutostart\config.json`.
 
 ---
 
-## 🚀 Uruchamianie i rozwój
+## 🚀 Running & Building
 
-### Wymagania:
-- Node.js (v18+) i npm
-- Rust (`rustup` z toolchainem `x86_64-pc-windows-gnu` lub `msvc`)
+### Prerequisites:
+- Node.js (v18+) & npm
+- Rust (`rustup` with `x86_64-pc-windows-gnu` or `msvc` toolchain)
 
-### Tryb deweloperski:
+### Development Mode:
 ```bash
 npm run tauri dev
 ```
 
-### Budowanie wersji produkcyjnej (.exe / instalator):
+### Production Build:
 ```bash
 npm run tauri build
 ```
-Wyjściowy plik `.exe` znajdziesz w:
+The compiled executable will be located at:
 `src-tauri/target/release/better-autostart.exe`
 
 ---
 
-## 📁 Bezpieczeństwo i kopie zapasowe
+## 📁 Safety & Registry Backups
 
-Gdy wyłączasz program w rejestrze systemowym przez Better Autostart, oryginalna wartość zostaje zachowana w kluczu zapasowym:
+When disabling a native Windows entry via Better Autostart, the original value is preserved in a backup registry key:
 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run_Disabled_BetterAutostart`
-W przypadku skrótów z folderu Autostart, pliki otrzymują bezpieczne rozszerzenie `.disabled`.
+For shortcut files in the Startup folder, items are renamed with a `.disabled` extension.

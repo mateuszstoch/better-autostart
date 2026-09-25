@@ -23,13 +23,13 @@ export const StatusBar: React.FC<StatusBarProps> = ({ status, lastError, delaySe
               [{String(status.current).padStart(2, '0')}/{String(status.total).padStart(2, '0')}]
             </span>
             <span className="truncate text-[var(--color-ink-2)]">
-              Uruchamianie: <strong className="text-[var(--color-ink)] font-normal">{status.appName}</strong>
+              Launching: <strong className="text-[var(--color-ink)] font-normal">{status.appName}</strong>
             </span>
           </div>
         ) : isCompleted ? (
           <div className="flex items-center gap-1.5 text-[var(--color-signal-run)]">
             <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Sekwencja wykonana pomyślnie ({status.total} procesów)</span>
+            <span>Sequence completed ({status.total} processes launched)</span>
           </div>
         ) : lastError ? (
           <div className="flex items-center gap-1.5 text-[var(--color-signal-err)] truncate">
@@ -39,9 +39,9 @@ export const StatusBar: React.FC<StatusBarProps> = ({ status, lastError, delaySe
         ) : (
           <div className="flex items-center gap-2 text-[var(--color-ink-3)]">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-signal-run)] inline-block" />
-            <span className="text-[var(--color-ink-2)] font-sans">Gotowy</span>
+            <span className="text-[var(--color-ink-2)] font-sans">Ready</span>
             <span>•</span>
-            <span className="tabular-nums">Odstęp: {delaySeconds.toFixed(1)}s</span>
+            <span className="tabular-nums">Delay: {delaySeconds.toFixed(1)}s</span>
           </div>
         )}
       </div>

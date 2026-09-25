@@ -28,7 +28,7 @@ fn to_wide_null<S: AsRef<OsStr>>(s: S) -> Vec<u16> {
 
 pub fn launch_item(item: &AppItem) -> Result<(), String> {
     if item.path.trim().is_empty() {
-        return Err("Ścieżka do pliku wykonywalnego jest pusta".to_string());
+        return Err("Executable path is empty".to_string());
     }
 
     if item.run_as_admin {
@@ -47,7 +47,6 @@ pub fn launch_item(item: &AppItem) -> Result<(), String> {
         };
 
         let dir_wide = if item.working_dir.trim().is_empty() {
-            // Default to executable directory if not specified
             Path::new(&item.path)
                 .parent()
                 .map(|parent| to_wide_null(parent.as_os_str()))
@@ -70,14 +69,12 @@ pub fn launch_item(item: &AppItem) -> Result<(), String> {
             )
         };
 
-        // ShellExecute returns an HINSTANCE > 32 on success
         if result > 32 {
             Ok(())
         } else {
-            Err(format!("ShellExecuteW nie powiodło się z kodem błędu: {}", result))
+            Err(format!("ShellExecuteW failed with error code: {}", result))
         }
     } else {
-        // Launch standard process
         let mut cmd = Command::new(&item.path);
         
         if !item.args.trim().is_empty() {
@@ -93,7 +90,7 @@ pub fn launch_item(item: &AppItem) -> Result<(), String> {
             }
         }
 
-        cmd.spawn().map_err(|e| format!("Błąd uruchamiania {}: {}", item.path, e))?;
+        cmd.spawn().map_err(|e| format!("Error launching {}: {}", item.path, e))?;
         Ok(())
     }
 }
@@ -123,14 +120,14 @@ pub fn run_all_sequentially(app_handle: AppHandle) {
             }));
 
             if let Err(err) = launch_item(item) {
-                eprintln!("Błąd uruchamiania {}: {}", item.name, err);
+                eprintln!("Error launching {}: {}", item.name, err);
                 let _ = app_handle.emit("launch-error", serde_json::json!({
                     "appName": &item.name,
                     "error": err
                 }));
             }
 
-            // Global delay between applications
+            // Pacing delay between processes
             if idx + 1 < total {
                 let delay = config.settings.delay_seconds.max(0.1);
                 thread::sleep(Duration::from_secs_f32(delay));

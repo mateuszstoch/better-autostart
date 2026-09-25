@@ -37,7 +37,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         .catch(() => {
           isEnabled()
             .then((active) => setAutostartPluginActive(active))
-            .catch((e) => console.warn('Błąd odczytu stanu autostartu:', e));
+            .catch((e) => console.warn('Error reading autostart state:', e));
         });
     }
   }, [isOpen, settings]);
@@ -59,7 +59,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       }
       setAutostartPluginActive(checked);
     } catch (err) {
-      console.error('Błąd rejestracji autostartu Windows:', err);
+      console.error('Error toggling Windows autostart:', err);
     }
   };
 
@@ -79,7 +79,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-rule)]">
           <h2 className="text-xs font-semibold text-[var(--color-ink)] uppercase font-mono tracking-wider flex items-center gap-2">
             <Sliders className="w-3.5 h-3.5 text-[var(--color-ink-3)]" />
-            <span>Konfiguracja silnika</span>
+            <span>Engine Configuration</span>
           </h2>
           <button
             type="button"
@@ -97,7 +97,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             <div className="flex items-center justify-between">
               <label className="font-medium text-[var(--color-ink-2)] flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-[var(--color-ink-3)]" />
-                <span>Odstęp czasowy (pauza po uruchomieniu)</span>
+                <span>Sequence Delay (pacing interval)</span>
               </label>
               <span className="font-mono tabular-nums text-[var(--color-ink)] bg-[var(--color-paper)] px-2 py-0.5 rounded-[3px] border border-[var(--color-rule)] font-semibold">
                 {delay.toFixed(1)}s
@@ -113,7 +113,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               className="w-full h-1 bg-[var(--color-paper)] rounded appearance-none cursor-pointer accent-[var(--color-ink)]"
             />
             <p className="text-[11px] text-[var(--color-ink-3)] leading-normal">
-              Określa czas oczekiwania przed przejściem do kolejnego procesu w sekwencji startowej.
+              Pacing delay after launching each process before spawning the next item.
             </p>
           </div>
 
@@ -131,15 +131,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               <div>
                 <span className="font-medium text-[var(--color-ink)] flex items-center gap-2">
                   <Power className="w-3.5 h-3.5 text-[var(--color-signal-run)]" />
-                  <span>Startuj z systemem Windows</span>
+                  <span>Launch with Windows</span>
                   {autostartPluginActive && (
                     <span className="text-[10px] text-[var(--color-signal-run)] bg-[var(--color-paper)] px-1.5 py-0.2 rounded-[3px] border border-[var(--color-rule)] font-mono">
-                      Aktywny
+                      Active
                     </span>
                   )}
                 </span>
                 <p className="text-[11px] text-[var(--color-ink-3)] mt-0.5 leading-normal">
-                  Rejestruje Better Autostart w rejestrze Windows jako główny zarządca procesów logowania.
+                  Registers Better Autostart in Windows Run key to manage startup sequence on user logon.
                 </p>
               </div>
             </label>
@@ -156,10 +156,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               />
               <div>
                 <span className="font-medium text-[var(--color-ink)]">
-                  Cichy start w tle
+                  Silent Background Start
                 </span>
                 <p className="text-[11px] text-[var(--color-ink-3)] mt-0.5 leading-normal">
-                  Przy logowaniu do Windowsa proces uruchomi się bez pokazywania okna pulpitu, rezydując w trayu.
+                  When booting with Windows, launches minimized to system tray without displaying main window.
                 </p>
               </div>
             </label>
@@ -173,7 +173,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             onClick={onClose}
             className="h-6 px-3 text-xs font-medium text-[var(--color-ink-2)] hover:text-[var(--color-ink)] bg-transparent hover:bg-[var(--color-paper-3)] rounded-[4px] border border-[var(--color-rule)] transition-colors"
           >
-            Anuluj
+            Cancel
           </button>
           <button
             type="button"
@@ -181,7 +181,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             className="h-6 px-3 text-xs font-medium text-[var(--color-paper)] bg-[var(--color-ink)] hover:bg-white rounded-[4px] flex items-center gap-1 transition-colors"
           >
             <Check className="w-3 h-3" />
-            <span>Zapisz</span>
+            <span>Save</span>
           </button>
         </div>
       </div>

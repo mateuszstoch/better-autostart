@@ -18,7 +18,7 @@ import {
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 
-import { AppItem, AppSettings, WindowsStartupItem, LaunchStatus, ImportResponse } from './types';
+import { AppItem, AppSettings, WindowsStartupItem, LaunchStatus } from './types';
 import { Header } from './components/Header';
 import { AppCard } from './components/AppCard';
 import { AddEditModal } from './components/AddEditModal';
@@ -97,7 +97,7 @@ export const App: React.FC = () => {
         setSettings(config.settings);
       }
     } catch (err) {
-      console.error('Błąd wczytywania konfiguracji:', err);
+      console.error('Error loading config:', err);
     }
   };
 
@@ -117,7 +117,7 @@ export const App: React.FC = () => {
     try {
       await invoke('save_items', { items: reordered });
     } catch (err) {
-      console.error('Błąd zapisu kolejności:', err);
+      console.error('Error saving order:', err);
     }
   };
 
@@ -129,7 +129,7 @@ export const App: React.FC = () => {
     try {
       await invoke('save_items', { items: updated });
     } catch (err) {
-      console.error('Błąd zapisu stanu:', err);
+      console.error('Error saving state:', err);
     }
   };
 
@@ -141,7 +141,7 @@ export const App: React.FC = () => {
     try {
       await invoke('delete_item', { id });
     } catch (err) {
-      console.error('Błąd usuwania:', err);
+      console.error('Error deleting item:', err);
     }
   };
 
@@ -157,7 +157,7 @@ export const App: React.FC = () => {
       try {
         await invoke('update_item', { item: updatedItem });
       } catch (err) {
-        console.error('Błąd aktualizacji:', err);
+        console.error('Error updating item:', err);
       }
     } else {
       const newItem: AppItem = {
@@ -176,7 +176,7 @@ export const App: React.FC = () => {
       try {
         await invoke('add_item', { item: newItem });
       } catch (err) {
-        console.error('Błąd dodawania:', err);
+        console.error('Error adding item:', err);
       }
     }
   };
@@ -186,7 +186,7 @@ export const App: React.FC = () => {
     try {
       await invoke('save_settings', { settings: newSettings });
     } catch (err) {
-      console.error('Błąd zapisu ustawień:', err);
+      console.error('Error saving settings:', err);
     }
   };
 
@@ -213,7 +213,7 @@ export const App: React.FC = () => {
       const scanned = await invoke<WindowsStartupItem[]>('scan_windows');
       setWindowsItems(scanned);
     } catch (err) {
-      console.error('Błąd skanowania autostartu Windows:', err);
+      console.error('Error scanning Windows startup:', err);
     } finally {
       setIsScanningWindows(false);
     }
@@ -222,17 +222,12 @@ export const App: React.FC = () => {
   const handleImportWindowsItem = async (
     item: WindowsStartupItem,
     disableNative: boolean
-  ): Promise<ImportResponse | void> => {
+  ) => {
     try {
-      const res = await invoke<ImportResponse>('import_windows_item', { item, disableNative });
+      await invoke('import_windows_item', { item, disableNative });
       await loadConfig();
-      if (res?.warning) {
-        setLastError(res.warning);
-      }
-      return res;
     } catch (err) {
-      console.error('Błąd importu wpisu Windows:', err);
-      setLastError(String(err));
+      console.error('Error importing Windows item:', err);
     }
   };
 
@@ -273,7 +268,7 @@ export const App: React.FC = () => {
             <Search className="w-3 h-3 text-[var(--color-ink-3)] absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Filtruj wpisy sekwencji..."
+              placeholder="Filter sequence entries..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-7 pr-2.5 py-1 text-xs font-mono bg-[var(--color-paper)] border border-[var(--color-rule)] rounded-[4px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-3)] focus:border-[var(--color-accent)] transition-colors"
@@ -281,9 +276,9 @@ export const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 text-[11px] font-mono tabular-nums text-[var(--color-ink-2)]">
-            <span>Kolejka: {activeCount} z {items.length} procesów</span>
+            <span>Queue: {activeCount} of {items.length} processes</span>
             <span className="text-[var(--color-ink-3)]">•</span>
-            <span>Szacowany czas startu: ~{(activeCount * settings.delay_seconds).toFixed(1)}s</span>
+            <span>Est. launch duration: ~{(activeCount * settings.delay_seconds).toFixed(1)}s</span>
           </div>
         </div>
       )}
@@ -297,10 +292,10 @@ export const App: React.FC = () => {
                 <Terminal className="w-4 h-4 text-[var(--color-accent)]" />
               </div>
               <h3 className="text-xs font-semibold text-[var(--color-ink)] uppercase font-mono tracking-wider mb-1">
-                Kolejka startowa jest pusta
+                Startup sequence is empty
               </h3>
               <p className="text-xs text-[var(--color-ink-2)] max-w-sm mb-4 leading-normal">
-                Skonfiguruj sekwencję uruchamiania dodając pierwszy plik wykonywalny lub importując istniejące programy z rejestru Windows.
+                Configure your boot sequence by adding your first executable or importing existing apps from Windows.
               </p>
               <div className="flex items-center gap-2">
                 <button
@@ -312,7 +307,7 @@ export const App: React.FC = () => {
                   className="h-7 px-3 text-xs font-medium rounded-[4px] bg-[var(--color-paper)] hover:bg-[var(--color-paper-3)] text-[var(--color-ink)] border border-[var(--color-rule)] flex items-center gap-1.5 transition-colors"
                 >
                   <FolderDown className="w-3.5 h-3.5 text-[var(--color-ink-2)]" />
-                  <span>Skanuj Windows</span>
+                  <span>Scan Windows</span>
                 </button>
                 <button
                   type="button"
@@ -323,7 +318,7 @@ export const App: React.FC = () => {
                   className="h-7 px-3 text-xs font-medium rounded-[4px] bg-[var(--color-ink)] hover:bg-white text-[var(--color-paper)] flex items-center gap-1 transition-colors"
                 >
                   <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Dodaj pozycję</span>
+                  <span>Add Program</span>
                 </button>
               </div>
             </div>

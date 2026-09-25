@@ -2,29 +2,7 @@ use crate::config::{save_config, ConfigState};
 use crate::launcher::{launch_item, run_all_sequentially};
 use crate::models::{AppConfig, AppItem, AppSettings, WindowsStartupItem};
 use crate::windows_startup::{disable_windows_item, scan_startup_items};
-use serde::Serialize;
 use tauri::{AppHandle, State};
-
-#[derive(Serialize)]
-pub struct ImportResponse {
-    pub success: bool,
-    pub warning: Option<String>,
-}
-
-#[tauri::command]
-pub fn check_admin() -> Result<bool, String> {
-    Ok(crate::windows_startup::is_process_elevated())
-}
-
-#[tauri::command]
-pub fn check_app_autostart() -> Result<bool, String> {
-    Ok(crate::windows_startup::is_app_autostart_enabled())
-}
-
-#[tauri::command]
-pub fn set_app_autostart(enabled: bool) -> Result<(), String> {
-    crate::windows_startup::set_app_autostart(enabled)
-}
 
 #[tauri::command]
 pub fn get_config(state: State<'_, ConfigState>) -> Result<AppConfig, String> {
@@ -43,12 +21,8 @@ pub fn save_items(items: Vec<AppItem>, state: State<'_, ConfigState>) -> Result<
 #[tauri::command]
 pub fn save_settings(settings: AppSettings, state: State<'_, ConfigState>) -> Result<(), String> {
     let mut cfg = state.0.lock().map_err(|e| e.to_string())?;
-    cfg.settings = settings.clone();
+    cfg.settings = settings;
     save_config(&cfg)?;
-
-    // Keep Windows HKCU autostart registry in sync
-    let _ = crate::windows_startup::set_app_autostart(settings.launch_on_boot);
-
     Ok(())
 }
 
@@ -69,7 +43,7 @@ pub fn update_item(item: AppItem, state: State<'_, ConfigState>) -> Result<(), S
         save_config(&cfg)?;
         Ok(())
     } else {
-        Err("Aplikacja nie została znaleziona".to_string())
+        Err("Application not found".to_string())
     }
 }
 
@@ -95,12 +69,9 @@ pub fn import_windows_item(
     item: WindowsStartupItem,
     disable_native: bool,
     state: State<'_, ConfigState>,
-) -> Result<ImportResponse, String> {
-    let mut warning = None;
+) -> Result<(), String> {
     if disable_native {
-        if let Err(e) = disable_windows_item(&item.name, &item.location_type, &item.command) {
-            warning = Some(e);
-        }
+        let _ = disable_windows_item(&item.name, &item.location_type, &item.command);
     }
 
     // Clean up command if it has quotes or arguments
@@ -132,12 +103,7 @@ pub fn import_windows_item(
         order: 0,
     };
 
-    add_item(app_item, state)?;
-
-    Ok(ImportResponse {
-        success: true,
-        warning,
-    })
+    add_item(app_item, state)
 }
 
 #[tauri::command]
@@ -152,6 +118,6 @@ pub fn run_single(id: String, state: State<'_, ConfigState>) -> Result<(), Strin
     if let Some(item) = cfg.items.iter().find(|i| i.id == id) {
         launch_item(item)
     } else {
-        Err("Aplikacja nie została znaleziona".to_string())
+        Err("Application not found".to_string())
     }
 }

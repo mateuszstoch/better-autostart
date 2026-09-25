@@ -32,21 +32,11 @@ pub fn run() {
             commands::import_windows_item,
             commands::run_all,
             commands::run_single,
-            commands::check_admin,
-            commands::check_app_autostart,
-            commands::set_app_autostart,
         ])
         .setup(move |app| {
-            // Ensure autostart registry entry is present if configured
-            if initial_config.settings.launch_on_boot {
-                if let Err(e) = windows_startup::set_app_autostart(true) {
-                    eprintln!("Błąd rejestracji autostartu: {}", e);
-                }
-            }
-
             // Setup system tray
             if let Err(e) = tray::setup_tray(app.handle()) {
-                eprintln!("Błąd inicjalizacji zasobnika systemowego: {}", e);
+                eprintln!("Error initializing system tray: {}", e);
             }
 
             // Handle main window behavior on startup
@@ -72,5 +62,5 @@ pub fn run() {
             }
         })
         .run(tauri::generate_context!())
-        .expect("Błąd podczas uruchamiania Better Autostart");
+        .expect("Error running Better Autostart application");
 }

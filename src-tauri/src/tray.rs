@@ -5,9 +5,9 @@ use tauri::{
 };
 
 pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
-    let show_i = MenuItem::with_id(app, "show", "Otwórz Better Autostart", true, None::<&str>)?;
-    let run_i = MenuItem::with_id(app, "run_all", "Uruchom wszystkie teraz", true, None::<&str>)?;
-    let quit_i = MenuItem::with_id(app, "quit", "Zakończ", true, None::<&str>)?;
+    let show_i = MenuItem::with_id(app, "show", "Open Better Autostart", true, None::<&str>)?;
+    let run_i = MenuItem::with_id(app, "run_all", "Run All Now", true, None::<&str>)?;
+    let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
     let menu = Menu::with_items(app, &[&show_i, &run_i, &quit_i])?;
 
     let icon = app.default_window_icon().cloned().ok_or("No default window icon")?;

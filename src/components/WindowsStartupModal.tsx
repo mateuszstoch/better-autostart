@@ -51,7 +51,7 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
         setItemWarnings((prev) => ({ ...prev, [item.id]: res.warning! }));
       }
     } catch (err) {
-      console.error('Błąd importu:', err);
+      console.error('Import error:', err);
     }
   };
 
@@ -62,10 +62,10 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-rule)]">
           <div>
             <h2 className="text-xs font-semibold text-[var(--color-ink)] uppercase font-mono tracking-wider">
-              Natywne wpisy autostartu Windows
+              Native Windows Startup Entries
             </h2>
             <p className="text-[11px] text-[var(--color-ink-2)] mt-0.5">
-              Odczyt z rejestru (HKCU/HKLM Run) oraz folderu systemowego.
+              Discovered from Windows Registry (HKCU/HKLM Run) and startup folder.
             </p>
           </div>
           <button
@@ -83,7 +83,7 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
             <Search className="w-3.5 h-3.5 text-[var(--color-ink-3)] absolute left-2.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Filtruj wpisy po nazwie lub ścieżce..."
+              placeholder="Filter entries by name or command path..."
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               className="w-full pl-8 pr-2.5 py-1 text-xs font-mono bg-[var(--color-paper-2)] border border-[var(--color-rule)] rounded-[4px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-3)] focus:border-[var(--color-accent)] transition-colors"
@@ -97,7 +97,7 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
             className="h-6 px-2.5 bg-[var(--color-paper-3)] hover:bg-[var(--color-rule)] text-[var(--color-ink)] text-xs font-medium rounded-[4px] border border-[var(--color-rule)] flex items-center gap-1.5 transition-colors"
           >
             <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin text-[var(--color-accent)]' : 'text-[var(--color-ink-2)]'}`} />
-            <span>Skanuj ponownie</span>
+            <span>Scan Again</span>
           </button>
         </div>
 
@@ -110,10 +110,10 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
               onChange={(e) => setDisableNative(e.target.checked)}
               className="rounded border-[var(--color-rule)] bg-[var(--color-paper)] text-[var(--color-ink)] focus:ring-0 cursor-pointer"
             />
-            <span>Wyłącz oryginalny wpis po imporcie (tworzy kopię w rejestrze)</span>
+            <span>Disable original entry in Windows after import (saves registry backup)</span>
           </label>
           <span className="font-mono text-[var(--color-ink-3)] tabular-nums">
-            {filteredItems.length} pozycji
+            {filteredItems.length} entries found
           </span>
         </div>
 
@@ -123,10 +123,10 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
             <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
             <div className="space-y-0.5">
               <p className="font-semibold text-amber-300">
-                Uruchomiono bez uprawnień administratora
+                Running without administrator privileges
               </p>
               <p className="text-[11px] text-amber-200/80 leading-relaxed">
-                Wpisy ze źródła <strong className="font-semibold text-amber-200">HKLM (Wszyscy użytkownicy)</strong> wymagają uruchomienia Better Autostart jako Administrator, aby system Windows zezwolił na ich wyłączenie. Wpisy z HKCU oraz Folderu Autostart można wyłączać bez uprawnień admina.
+                Entries from <strong className="font-semibold text-amber-200">HKLM (All Users)</strong> require running Better Autostart as Administrator to allow Windows to disable them. Entries from HKCU and Startup Folder can be modified without elevation.
               </p>
             </div>
           </div>
@@ -137,11 +137,11 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
           {isLoading ? (
             <div className="py-12 text-center text-xs text-[var(--color-ink-2)] font-mono">
               <RefreshCw className="w-4 h-4 animate-spin mx-auto mb-2 text-[var(--color-accent)]" />
-              Przeszukiwanie rejestru Windows…
+              Scanning Windows registry…
             </div>
           ) : filteredItems.length === 0 ? (
             <div className="py-12 text-center text-xs text-[var(--color-ink-3)]">
-              Brak programów w natywnym autostarcie.
+              No startup programs found matching filter.
             </div>
           ) : (
             filteredItems.map((item) => {
@@ -160,15 +160,15 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
                       {item.location_type === 'RegistryHKLM' ? (
                         <span className="text-[10px] text-amber-300 bg-amber-950/40 px-1.5 py-0.5 rounded-[3px] border border-amber-800/50 font-mono flex items-center gap-1">
                           <Shield className="w-2.5 h-2.5" />
-                          <span>HKLM · Wymaga Admina</span>
+                          <span>HKLM · Requires Admin</span>
                         </span>
                       ) : item.location_type === 'RegistryHKCU' ? (
                         <span className="text-[10px] text-[var(--color-ink-2)] bg-[var(--color-paper)] px-1.5 py-0.5 rounded-[3px] border border-[var(--color-rule)] font-mono">
-                          HKCU · Użytkownik
+                          HKCU · Current User
                         </span>
                       ) : (
                         <span className="text-[10px] text-[var(--color-ink-2)] bg-[var(--color-paper)] px-1.5 py-0.5 rounded-[3px] border border-[var(--color-rule)] font-mono">
-                          Folder Autostart
+                          Startup Folder
                         </span>
                       )}
                     </div>
@@ -196,12 +196,12 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
                     {isImported ? (
                       <>
                         <Check className="w-3 h-3 text-[var(--color-signal-run)]" />
-                        <span>Dodano</span>
+                        <span>Imported</span>
                       </>
                     ) : (
                       <>
                         <ArrowDownToLine className="w-3 h-3 text-[var(--color-ink-2)]" />
-                        <span>Importuj</span>
+                        <span>Import</span>
                       </>
                     )}
                   </button>
@@ -218,7 +218,7 @@ export const WindowsStartupModal: React.FC<WindowsStartupModalProps> = ({
             onClick={onClose}
             className="h-6 px-3 text-xs font-medium text-[var(--color-ink-2)] hover:text-[var(--color-ink)] bg-[var(--color-paper-2)] hover:bg-[var(--color-paper-3)] rounded-[4px] border border-[var(--color-rule)] transition-colors"
           >
-            Zamknij
+            Close
           </button>
         </div>
       </div>
