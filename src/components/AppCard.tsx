@@ -66,7 +66,7 @@ export const AppCard: React.FC<AppCardProps> = ({
           {...attributes}
           {...listeners}
           className="cursor-grab active:cursor-grabbing text-[var(--color-ink-3)] group-hover:text-[var(--color-ink-2)] p-0.5 rounded transition-colors"
-          title="Przeciągnij, aby zmienić pozycję w sekwencji"
+          title="Drag to change position in sequence"
         >
           <GripVertical className="w-3.5 h-3.5" />
         </button>
@@ -84,14 +84,14 @@ export const AppCard: React.FC<AppCardProps> = ({
             </span>
 
             {item.run_as_admin && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[var(--color-signal-warn)] bg-[var(--color-paper-3)] border border-[var(--color-rule)] px-1 py-0.2 rounded-[3px]" title="Wymaga uprawnień administratora (UAC)">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[var(--color-signal-warn)] bg-[var(--color-paper-3)] border border-[var(--color-rule)] px-1 py-0.2 rounded-[3px]" title="Requires administrator privileges (UAC)">
                 <Shield className="w-2.5 h-2.5 fill-current" />
                 ADMIN
               </span>
             )}
 
             {item.args && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[var(--color-ink-2)] bg-[var(--color-paper)] border border-[var(--color-rule)] px-1 py-0.2 rounded-[3px] truncate max-w-[180px]" title={`Parametry: ${item.args}`}>
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[var(--color-ink-2)] bg-[var(--color-paper)] border border-[var(--color-rule)] px-1 py-0.2 rounded-[3px] truncate max-w-[180px]" title={`Arguments: ${item.args}`}>
                 <Terminal className="w-2.5 h-2.5 text-[var(--color-ink-3)]" />
                 {item.args}
               </span>
@@ -111,7 +111,7 @@ export const AppCard: React.FC<AppCardProps> = ({
             type="button"
             onClick={() => onRunSingle(item.id)}
             className="h-6 w-6 rounded-[3px] flex items-center justify-center text-[var(--color-ink-2)] hover:text-[var(--color-signal-run)] hover:bg-[var(--color-paper)] border border-transparent hover:border-[var(--color-rule)] transition-colors"
-            title="Przetestuj uruchomienie pojedynczego procesu"
+            title="Test launch single process"
           >
             <Play className="w-3 h-3 fill-current" />
           </button>
@@ -120,7 +120,7 @@ export const AppCard: React.FC<AppCardProps> = ({
             type="button"
             onClick={() => onEdit(item)}
             className="h-6 w-6 rounded-[3px] flex items-center justify-center text-[var(--color-ink-2)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper)] border border-transparent hover:border-[var(--color-rule)] transition-colors"
-            title="Edytuj parametry"
+            title="Edit parameters"
           >
             <Pencil className="w-3 h-3" />
           </button>
@@ -129,7 +129,7 @@ export const AppCard: React.FC<AppCardProps> = ({
             type="button"
             onClick={() => onDelete(item.id)}
             className="h-6 w-6 rounded-[3px] flex items-center justify-center text-[var(--color-ink-2)] hover:text-[var(--color-signal-err)] hover:bg-[var(--color-paper)] border border-transparent hover:border-[var(--color-rule)] transition-colors"
-            title="Usuń z sekwencji"
+            title="Remove from sequence"
           >
             <Trash2 className="w-3 h-3" />
           </button>
@@ -146,7 +146,7 @@ export const AppCard: React.FC<AppCardProps> = ({
           className={`relative inline-flex h-3.5 w-6 flex-shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-100 ${
             item.enabled ? 'bg-[var(--color-ink)]' : 'bg-[var(--color-rule)]'
           }`}
-          title={item.enabled ? 'Aktywny (uruchomi się przy boot)' : 'Wyłączony'}
+          title={item.enabled ? 'Enabled (launches on boot)' : 'Disabled'}
         >
           <span
             className={`pointer-events-none inline-block h-2.5 w-2.5 transform rounded-full shadow-sm transition duration-100 ${

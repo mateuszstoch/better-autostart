@@ -47,11 +47,11 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
         multiple: false,
         filters: [
           {
-            name: 'Wykonywalne (*.exe, *.bat, *.cmd, *.lnk)',
+            name: 'Executable (*.exe, *.bat, *.cmd, *.lnk)',
             extensions: ['exe', 'bat', 'cmd', 'lnk'],
           },
           {
-            name: 'Wszystkie pliki (*.*)',
+            name: 'All files (*.*)',
             extensions: ['*'],
           },
         ],
@@ -66,7 +66,7 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
         }
       }
     } catch (err) {
-      console.error('Błąd otwierania okna dialogowego:', err);
+      console.error('Error opening file dialog:', err);
     }
   };
 
@@ -80,7 +80,7 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
         setWorkingDir(selected);
       }
     } catch (err) {
-      console.error('Błąd wyboru folderu:', err);
+      console.error('Error selecting directory:', err);
     }
   };
 
@@ -104,7 +104,7 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-rule)]">
           <h2 className="text-xs font-semibold text-[var(--color-ink)] uppercase font-mono tracking-wider">
-            {itemToEdit ? 'Konfiguracja pozycji' : 'Nowa pozycja sekwencji'}
+            {itemToEdit ? 'Configure Program' : 'New Startup Program'}
           </h2>
           <button
             type="button"
@@ -120,12 +120,12 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
           {/* Name */}
           <div>
             <label className="block font-medium text-[var(--color-ink-2)] mb-1">
-              Nazwa wyświetlana
+              Display Name
             </label>
             <input
               type="text"
               required
-              placeholder="np. Discord, Steam..."
+              placeholder="e.g. Discord, Steam..."
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-2.5 py-1.5 bg-[var(--color-paper)] border border-[var(--color-rule)] rounded-[4px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-3)] focus:border-[var(--color-accent)] transition-colors"
@@ -135,7 +135,7 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
           {/* Path */}
           <div>
             <label className="block font-medium text-[var(--color-ink-2)] mb-1">
-              Plik wykonywalny (.exe / .bat)
+              Executable Path (.exe / .bat)
             </label>
             <div className="flex gap-2">
               <input
@@ -152,7 +152,7 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
                 className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[var(--color-paper-3)] hover:bg-[var(--color-rule)] text-[var(--color-ink)] font-medium rounded-[4px] border border-[var(--color-rule)] transition-colors"
               >
                 <FolderOpen className="w-3.5 h-3.5 text-[var(--color-ink-2)]" />
-                <span>Wybierz…</span>
+                <span>Browse…</span>
               </button>
             </div>
           </div>
@@ -161,11 +161,11 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
           <div>
             <label className="block font-medium text-[var(--color-ink-2)] mb-1 flex items-center gap-1.5">
               <Terminal className="w-3.5 h-3.5 text-[var(--color-ink-3)]" />
-              Argumenty wiersza poleceń
+              Command-line Arguments
             </label>
             <input
               type="text"
-              placeholder="np. --silent --minimized"
+              placeholder="e.g. --silent --minimized"
               value={args}
               onChange={(e) => setArgs(e.target.value)}
               className="w-full px-2.5 py-1.5 font-mono bg-[var(--color-paper)] border border-[var(--color-rule)] rounded-[4px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-3)] focus:border-[var(--color-accent)] transition-colors"
@@ -176,12 +176,12 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
           <div>
             <label className="block font-medium text-[var(--color-ink-2)] mb-1 flex items-center gap-1.5">
               <Folder className="w-3.5 h-3.5 text-[var(--color-ink-3)]" />
-              Katalog roboczy (opcjonalny)
+              Working Directory (optional)
             </label>
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Domyślnie katalog pliku .exe"
+                placeholder="Defaults to executable folder"
                 value={workingDir}
                 onChange={(e) => setWorkingDir(e.target.value)}
                 className="flex-1 px-2.5 py-1.5 font-mono bg-[var(--color-paper)] border border-[var(--color-rule)] rounded-[4px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-3)] focus:border-[var(--color-accent)] transition-colors"
@@ -191,7 +191,7 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
                 onClick={handleBrowseDir}
                 className="px-2.5 py-1.5 bg-[var(--color-paper-3)] hover:bg-[var(--color-rule)] text-[var(--color-ink-2)] rounded-[4px] border border-[var(--color-rule)] transition-colors"
               >
-                Katalog
+                Directory
               </button>
             </div>
           </div>
@@ -208,10 +208,10 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
               <div>
                 <div className="flex items-center gap-1.5 font-semibold text-[var(--color-ink)]">
                   <Shield className="w-3.5 h-3.5 text-[var(--color-signal-warn)]" />
-                  Wymagaj uprawnień administratora
+                  Run as Administrator
                 </div>
                 <p className="text-[11px] text-[var(--color-ink-2)] mt-0.5 leading-normal">
-                  Wywołuje proces przez Win32 ShellExecuteW z czasownikiem `runas` (elewacja UAC).
+                  Launches process via Win32 ShellExecuteW with `runas` verb (UAC elevation).
                 </p>
               </div>
             </label>
@@ -224,13 +224,13 @@ export const AddEditModal: React.FC<AddEditModalProps> = ({
               onClick={onClose}
               className="h-7 px-3 text-xs font-medium text-[var(--color-ink-2)] hover:text-[var(--color-ink)] bg-transparent hover:bg-[var(--color-paper-3)] rounded-[4px] border border-[var(--color-rule)] transition-colors"
             >
-              Anuluj
+              Cancel
             </button>
             <button
               type="submit"
               className="h-7 px-3.5 text-xs font-medium text-[var(--color-paper)] bg-[var(--color-ink)] hover:bg-white rounded-[4px] transition-colors"
             >
-              {itemToEdit ? 'Zapisz' : 'Zatwierdź'}
+              {itemToEdit ? 'Save Changes' : 'Add Program'}
             </button>
           </div>
         </form>

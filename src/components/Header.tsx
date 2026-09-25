@@ -41,10 +41,10 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-2 text-[11px] font-mono tabular-nums text-[var(--color-ink-2)]">
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-signal-run)] inline-block" />
-            <span>{activeCount} / {itemCount} aktywnych</span>
+            <span>{activeCount} / {itemCount} active</span>
           </span>
           <span className="text-[var(--color-ink-3)]">•</span>
-          <span className="text-[var(--color-ink-3)]">krok: {delaySeconds.toFixed(1)}s</span>
+          <span className="text-[var(--color-ink-3)]">step: {delaySeconds.toFixed(1)}s</span>
         </div>
       </div>
 
@@ -59,14 +59,14 @@ export const Header: React.FC<HeaderProps> = ({
               ? 'bg-[var(--color-paper)] text-[var(--color-ink-3)] border-[var(--color-rule)] cursor-not-allowed'
               : 'bg-[var(--color-paper-3)] hover:bg-[var(--color-rule)] text-[var(--color-signal-run)] border-[var(--color-rule)] active:translate-y-[1px]'
           }`}
-          title="Uruchom całą sekwencję aplikacji po kolei"
+          title="Run full application sequence in order"
         >
           {isRunning ? (
             <RefreshCw className="w-3 h-3 animate-spin text-[var(--color-signal-run)]" />
           ) : (
             <Play className="w-3 h-3 fill-current text-[var(--color-signal-run)]" />
           )}
-          <span>{isRunning ? 'Wykonywanie…' : 'Start sekwencji'}</span>
+          <span>{isRunning ? 'Running…' : 'Run Sequence'}</span>
         </button>
 
         <div className="h-3.5 w-[1px] bg-[var(--color-rule)] mx-0.5" />
@@ -75,10 +75,10 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           onClick={onOpenWindowsModal}
           className="h-7 px-2.5 rounded-[4px] text-xs font-medium text-[var(--color-ink-2)] hover:text-[var(--color-ink)] bg-[var(--color-paper)] hover:bg-[var(--color-paper-3)] border border-[var(--color-rule)] flex items-center gap-1.5 transition-colors"
-          title="Skaner wpisów rejestru i folderu autostartu Windows"
+          title="Scan Windows Registry and Startup folder entries"
         >
           <Activity className="w-3 h-3 text-[var(--color-ink-3)]" />
-          <span>Skaner OS</span>
+          <span>Scan Windows</span>
         </button>
 
         <button
@@ -87,14 +87,14 @@ export const Header: React.FC<HeaderProps> = ({
           className="h-7 px-2.5 rounded-[4px] text-xs font-medium text-[var(--color-paper)] bg-[var(--color-ink)] hover:bg-white flex items-center gap-1 transition-colors"
         >
           <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-          <span>Dodaj program</span>
+          <span>Add Program</span>
         </button>
 
         <button
           type="button"
           onClick={onOpenSettingsModal}
           className="h-7 w-7 rounded-[4px] flex items-center justify-center text-[var(--color-ink-2)] hover:text-[var(--color-ink)] bg-[var(--color-paper)] hover:bg-[var(--color-paper-3)] border border-[var(--color-rule)] transition-colors"
-          title="Konfiguracja parametrów"
+          title="Engine Settings"
         >
           <Settings className="w-3.5 h-3.5" />
         </button>
