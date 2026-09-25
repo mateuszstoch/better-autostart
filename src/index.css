@@ -1,0 +1,60 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Workbench · design-system: design.md · designed-as-app */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-paper: oklch(0.16 0.005 260);
+  --color-paper-2: oklch(0.20 0.006 260);
+  --color-paper-3: oklch(0.25 0.008 260);
+  --color-ink: oklch(0.96 0.002 260);
+  --color-ink-2: oklch(0.68 0.005 260);
+  --color-ink-3: oklch(0.48 0.006 260);
+  --color-rule: oklch(0.28 0.008 260);
+  --color-accent: oklch(0.58 0.22 260);
+  --color-signal-run: oklch(0.68 0.16 150);
+  --color-signal-warn: oklch(0.72 0.16 75);
+  --color-signal-err: oklch(0.62 0.20 25);
+  --color-focus: oklch(0.65 0.18 260);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply select-none overflow-hidden antialiased;
+  }
+
+  input, button {
+    outline: none;
+  }
+
+  input:focus-visible, button:focus-visible {
+    outline: 1px solid var(--color-focus);
+    outline-offset: 1px;
+  }
+}
+
+/* Precise hairline scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-rule);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-3);
+}
